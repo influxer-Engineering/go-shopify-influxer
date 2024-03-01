@@ -1,6 +1,6 @@
-module github.com/bold-commerce/go-shopify/v3
+module github.com/Influxer-Engineering/go-shopify-influxer
 
-go 1.13
+go 1.21
 
 require (
 	github.com/google/go-querystring v1.0.0
