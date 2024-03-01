@@ -1,4 +1,4 @@
-module github.com/Influxer-Engineering/go-shopify-influxer
+module github.com/influxer-Engineering/go-shopify-influxer
 
 go 1.21
 
