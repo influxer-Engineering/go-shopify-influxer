@@ -19,6 +19,7 @@ const (
 // See: https://help.shopify.com/api/reference/order
 type OrderService interface {
 	List(context.Context, interface{}) ([]Order, error)
+	ListAll(context.Context, interface{}) ([]Order, error)
 	ListWithPagination(context.Context, interface{}) ([]Order, *Pagination, error)
 	Count(context.Context, interface{}) (int, error)
 	Get(context.Context, uint64, interface{}) (*Order, error)
@@ -411,7 +412,7 @@ type PaymentDetails struct {
 }
 
 type ShippingLines struct {
-	Id                            uint64           `json:"id,omitempty"`
+	Id                            string           `json:"id,omitempty"`
 	Title                         string           `json:"title,omitempty"`
 	Price                         *decimal.Decimal `json:"price,omitempty"`
 	PriceSet                      *AmountSet       `json:"price_set,omitempty"`
@@ -427,7 +428,8 @@ type ShippingLines struct {
 	Handle                        string           `json:"handle,omitempty"`
 }
 
-// UnmarshalJSON custom unmarshaller for ShippingLines implemented to handle requested_fulfillment_service_id being
+// UnmarshalJSON custom unmarshaller for ShippingLines implemented
+// to handle requested_fulfillment_service_id being
 // returned as json numbers or json nulls instead of json strings
 func (sl *ShippingLines) UnmarshalJSON(data []byte) error {
 	type alias ShippingLines
@@ -535,6 +537,29 @@ func (s *OrderServiceOp) List(ctx context.Context, options interface{}) ([]Order
 		return nil, err
 	}
 	return orders, nil
+}
+
+// ListAll Lists all orders, iterating over pages
+func (s *OrderServiceOp) ListAll(ctx context.Context, options interface{}) ([]Order, error) {
+	collector := []Order{}
+
+	for {
+		entities, pagination, err := s.ListWithPagination(ctx, options)
+
+		if err != nil {
+			return collector, err
+		}
+
+		collector = append(collector, entities...)
+
+		if pagination.NextPageOptions == nil {
+			break
+		}
+
+		options = pagination.NextPageOptions
+	}
+
+	return collector, nil
 }
 
 func (s *OrderServiceOp) ListWithPagination(ctx context.Context, options interface{}) ([]Order, *Pagination, error) {
