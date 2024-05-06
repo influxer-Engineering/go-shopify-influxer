@@ -24,19 +24,25 @@ type InventoryItemServiceOp struct {
 	client *Client
 }
 
+type HarmonizedCountryCode struct {
+	CountryCode          *string `json:"country_code,omitempty"`
+	HarmonizedSystemCode *string `json:"harmonized_system_code,omitempty"`
+}
+
 // InventoryItem represents a Shopify inventory item
 type InventoryItem struct {
-	Id                           uint64           `json:"id,omitempty"`
-	SKU                          string           `json:"sku,omitempty"`
-	CreatedAt                    *time.Time       `json:"created_at,omitempty"`
-	UpdatedAt                    *time.Time       `json:"updated_at,omitempty"`
-	Cost                         *decimal.Decimal `json:"cost,omitempty"`
-	Tracked                      *bool            `json:"tracked,omitempty"`
-	AdminGraphqlApiId            string           `json:"admin_graphql_api_id,omitempty"`
-	CountryCodeOfOrigin          *string          `json:"country_code_of_origin"`
-	CountryHarmonizedSystemCodes []string         `json:"country_harmonized_system_codes"`
-	HarmonizedSystemCode         *string          `json:"harmonized_system_code"`
-	ProvinceCodeOfOrigin         *string          `json:"province_code_of_origin"`
+	Id                           uint64                  `json:"id,omitempty"`
+	SKU                          string                  `json:"sku,omitempty"`
+	CreatedAt                    *time.Time              `json:"created_at,omitempty"`
+	UpdatedAt                    *time.Time              `json:"updated_at,omitempty"`
+	RequiresShipping             *bool                   `json:"requires_shipping"`
+	Cost                         *decimal.Decimal        `json:"cost,omitempty"`
+	CountryCodeOfOrigin          *string                 `json:"country_code_of_origin"`
+	ProvinceCodeOfOrigin         *string                 `json:"province_code_of_origin"`
+	HarmonizedSystemCode         *string                 `json:"harmonized_system_code"`
+	Tracked                      *bool                   `json:"tracked,omitempty"`
+	CountryHarmonizedSystemCodes []HarmonizedCountryCode `json:"country_harmonized_system_codes"`
+	AdminGraphqlApiId            string                  `json:"admin_graphql_api_id,omitempty"`
 }
 
 // InventoryItemResource is used for handling single item requests and responses

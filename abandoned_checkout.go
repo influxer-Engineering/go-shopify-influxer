@@ -12,6 +12,7 @@ const abandonedCheckoutsBasePath = "checkouts"
 
 // AbandonedCheckoutService is an interface for interfacing with the abandonedCheckouts endpoints
 // of the Shopify API.
+
 // See: https://shopify.dev/docs/api/admin-rest/latest/resources/abandoned-checkouts
 type AbandonedCheckoutService interface {
 	List(context.Context, interface{}) ([]AbandonedCheckout, error)
